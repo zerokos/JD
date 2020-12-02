@@ -1,0 +1,31 @@
+
+name: 互助码自动上车
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '20 18 * * *'
+  # watch:
+  #   types: started
+  repository_dispatch:
+    types: jd_sharecode
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+    steps:
+      - name: Checkout
+        run: |
+          git clone https://github.com/lifeishard4me/Actions.git ~/Actions
+      - name: 提交互助码
+        run: |
+          cd ~/Actions/.github
+          chmod +x jd_sharecodes.sh
+          ./jd_sharecodes.sh
+        env:
+          PETSHARECODES: ${{ secrets.PETSHARECODES }}
+          FRUITSHARECODES: ${{ secrets.FRUITSHARECODES }}
+          PLANT_BEAN_SHARECODES: ${{ secrets.PLANT_BEAN_SHARECODES }}
+          SUPERMARKET_SHARECODES: ${{ secrets.SUPERMARKET_SHARECODES }}
+          DDFACTORY_SHARECODES: ${{ secrets.DDFACTORY_SHARECODES }}
+          JXFACTORY_SHARECODES: ${{ secrets.JXFACTORY_SHARECODES }}
