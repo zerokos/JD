@@ -2,7 +2,7 @@
  * @Author: lxk0301 https://github.com/lxk0301 
  * @Date: 2020-11-25 18:19:21 
  * @Last Modified by: lxk0301
- * @Last Modified time: 2020-11-26 12:58:02
+ * @Last Modified time: 2020-11-28 09:58:02
  */
 /*
 东东工厂，不是京喜工厂
@@ -102,7 +102,10 @@ function showMsg() {
     if (!jdNotify) {
       $.msg($.name, '', `${message}`);
     } else {
-      $.log(message);
+      $.log(`京东账号${$.index}${$.nickName}\n${message}`);
+    }
+    if (new Date().getHours() === 23) {
+      $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
     }
     resolve()
   })
@@ -151,22 +154,22 @@ async function algorithm() {
                     }
                   }
                   // console.log(`\n您心仪商品${name}\n当前数量为：${couponCount}\n兑换所需电量为：${totalScore}\n您当前总电量为：${remainScore * 1 + useScore * 1}\n`);
-                  if (wantProductSkuId && ((remainScore * 1 + useScore * 1) >= (totalScore + 100000))) {
+                  if (wantProductSkuId && ((remainScore * 1 + useScore * 1) >= (totalScore * 1 + 100000))) {
                     console.log(`\n提供的心仪商品${name}目前数量：${couponCount}，且当前总电量为：${remainScore * 1 + useScore * 1}，【满足】兑换此商品所需总电量：${totalScore + 100000}`);
                     console.log(`请去活动页面更换成心仪商品并手动投入电量兑换\n`);
-                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请去活动页面更换成心仪商品并手动投入电量兑换`);
+                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请点击弹窗直达活动页面\n更换成心仪商品并手动投入电量兑换`, {'open-url': 'openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2uSsV2wHEkySvompfjB43nuKkcHp/index.html%22%20%7D'});
                     await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请去活动页面更换成心仪商品并手动投入电量兑换`);
                   } else {
                     console.log(`您心仪商品${name}\n当前数量为：${couponCount}\n兑换所需电量为：${totalScore}\n您当前总电量为：${remainScore * 1 + useScore * 1}\n不满足兑换心仪商品的条件\n`)
                   }
                 } else {
                   console.log(`BoxJs或环境变量暂未提供心仪商品\n如需兑换心仪商品，请提供心仪商品名称，否则满足条件后会为您兑换当前所选商品：${name}\n`);
-                  if (((remainScore * 1 + useScore * 1) >= totalScore * 1) && (couponCount * 1 > 0)) {
+                  if (((remainScore * 1 + useScore * 1) >= totalScore * 1 + 100000) && (couponCount * 1 > 0)) {
                     console.log(`\n所选商品${name}目前数量：${couponCount}，且当前总电量为：${remainScore * 1 + useScore * 1}，【满足】兑换此商品所需总电量：${totalScore}`);
-                    console.log(`BoxJs或环境变量暂未提供心仪商品，下面为您目前选的${name} 投入电量\n`);
-                    await jdfactory_addEnergy();
-                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n已为您投入电量，请去活动页面查看`);
-                    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `所选商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n已为您投入电量，请去活动页面查看`);
+                    console.log(`BoxJs或环境变量暂未提供心仪商品，下面为您目前选的${name} 发送提示通知\n`);
+                    // await jdfactory_addEnergy();
+                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您所选商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请点击弹窗直达活动页面查看`, {'open-url': 'openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2uSsV2wHEkySvompfjB43nuKkcHp/index.html%22%20%7D'});
+                    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `所选商品${name}目前数量：${couponCount}\n当前总电量为：${remainScore * 1 + useScore * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请速去活动页面查看`);
                   } else {
                     console.log(`\n所选商品${name}目前数量：${couponCount}，且当前总电量为：${remainScore * 1 + useScore * 1}，【不满足】兑换此商品所需总电量：${totalScore}`)
                     console.log(`故不一次性投入电力，一直放到蓄电池累计\n`);
@@ -174,6 +177,8 @@ async function algorithm() {
                 }
               } else {
                 console.log(`\n此账号${$.index}${$.nickName}暂未选择商品\n`);
+                message += `已选商品：暂无\n`;
+                message += `心仪商品：${wantProduct ? wantProduct : '暂无'}\n`;
                 if (wantProduct) {
                   console.log(`BoxJs或环境变量提供的心仪商品：${wantProduct}\n`);
                   await jdfactory_getProductList(true);
@@ -188,16 +193,29 @@ async function algorithm() {
                       wantProductSkuId = item.skuId;
                     }
                   }
+                  message += `心仪商品数量：${couponCount}\n`;
+                  message += `心仪商品所需电量：${totalScore}\n`;
+                  message += `您当前总电量：${$.batteryValue * 1}\n`;
                   if (wantProductSkuId && (($.batteryValue * 1) >= (totalScore))) {
                     console.log(`\n提供的心仪商品${name}目前数量：${couponCount}，且当前总电量为：${$.batteryValue * 1}，【满足】兑换此商品所需总电量：${totalScore}`);
-                    console.log(`请去活动页面更换成心仪商品并手动投入电量兑换\n`);
-                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${$.batteryValue * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请去活动页面选择此心仪商品并手动投入电量兑换`);
+                    console.log(`请去活动页面选择心仪商品并手动投入电量兑换\n`);
+                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${$.batteryValue * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请点击弹窗直达活动页面\n选择此心仪商品并手动投入电量兑换`, {'open-url': 'openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2uSsV2wHEkySvompfjB43nuKkcHp/index.html%22%20%7D'});
                     await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `您提供的心仪商品${name}目前数量：${couponCount}\n当前总电量为：${$.batteryValue * 1}\n【满足】兑换此商品所需总电量：${totalScore}\n请去活动页面选择此心仪商品并手动投入电量兑换`);
                   } else {
                     console.log(`您心仪商品${name}\n当前数量为：${couponCount}\n兑换所需电量为：${totalScore}\n您当前总电量为：${$.batteryValue * 1}\n不满足兑换心仪商品的条件\n`)
                   }
                 } else {
                   console.log(`BoxJs或环境变量暂未提供心仪商品\n如需兑换心仪商品，请提供心仪商品名称\n`);
+                  await jdfactory_getProductList(true);
+                  message += `当前剩余最多商品：${$.canMakeList[0].name}\n`;
+                  message += `兑换所需电量：${$.canMakeList[0].fullScore}\n`;
+                  message += `您当前总电量：${$.batteryValue * 1}\n`;
+                  if ($.canMakeList[0].couponCount > 0 && $.batteryValue * 1 >= $.canMakeList[0].fullScore) {
+                    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n当前总电量为：${$.batteryValue * 1}\n当前总电量为：${$.batteryValue * 1}\n【满足】兑换${$.canMakeList[0].name}所需总电量：${$.canMakeList[0].totalScore}\n请点击弹窗直达活动页面\n选择此心仪商品并手动投入电量兑换`, {'open-url': 'openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/2uSsV2wHEkySvompfjB43nuKkcHp/index.html%22%20%7D'});
+                    await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName}`, `当前总电量为：${$.batteryValue * 1}\n【满足】兑换${$.canMakeList[0].name}所需总电量：${$.canMakeList[0].totalScore}\n请速去活动页面查看`);
+                  } else {
+                    console.log(`\n目前电量${$.batteryValue * 1},不满足兑换 ${$.canMakeList[0].name}所需的 ${$.canMakeList[0].fullScore}电量\n`)
+                  }
                 }
               }
             } else {
@@ -312,7 +330,8 @@ async function doTask() {
       //从数码电器首页进入
       if (item.status === 1) {
         console.log(`准备做此任务：${item.taskName}`);
-        // await jdfactory_collectScore(item.simpleRecordInfoVo.taskToken);
+        await queryVkComponent();
+        await jdfactory_collectScore(item.simpleRecordInfoVo.taskToken);
       } else {
         console.log(`${item.taskName}已完成`);
       }
@@ -454,8 +473,43 @@ function jdfactory_makeProduct(skuId) {
     })
   })
 }
+function queryVkComponent() {
+  return new Promise(resolve => {
+    const options = {
+      "url": `https://api.m.jd.com/client.action?functionId=queryVkComponent`,
+      "body": `adid=0E38E9F1-4B4C-40A4-A479-DD15E58A5623&area=19_1601_50258_51885&body={"componentId":"4f953e59a3af4b63b4d7c24f172db3c3","taskParam":"{\\"actId\\":\\"8tHNdJLcqwqhkLNA8hqwNRaNu5f\\"}","cpUid":"8tHNdJLcqwqhkLNA8hqwNRaNu5f","taskSDKVersion":"1.0.3","businessId":"babel"}&build=167436&client=apple&clientVersion=9.2.5&d_brand=apple&d_model=iPhone11,8&eid=eidIf12a8121eas2urxgGc+zS5+UYGu1Nbed7bq8YY+gPd0Q0t+iviZdQsxnK/HTA7AxZzZBrtu1ulwEviYSV3QUuw2XHHC+PFHdNYx1A/3Zt8xYR+d3&isBackground=N&joycious=228&lang=zh_CN&networkType=wifi&networklibtype=JDNetworkBaseAF&openudid=88732f840b77821b345bf07fd71f609e6ff12f43&osVersion=14.2&partner=TF&rfs=0000&scope=11&screen=828*1792&sign=792d92f78cc893f43c32a4f0b2203a41&st=1606533009673&sv=122&uts=0f31TVRjBSsqndu4/jgUPz6uymy50MQJFKw5SxNDrZGH4Sllq/CDN8uyMr2EAv+1xp60Q9gVAW42IfViu/SFHwjfGAvRI6iMot04FU965+8UfAPZTG6MDwxmIWN7YaTL1ACcfUTG3gtkru+D4w9yowDUIzSuB+u+eoLwM7uynPMJMmGspVGyFIgDXC/tmNibL2k6wYgS249Pa2w5xFnYHQ==&uuid=hjudwgohxzVu96krv/T6Hg==&wifiBssid=1b5809fb84adffec2a397007cc235c03`,
+      "headers":  {
+        "Cookie": cookie,
+        "Accept": `*/*`,
+        "Connection": `keep-alive`,
+        "Content-Type": `application/x-www-form-urlencoded`,
+        "Accept-Encoding": `gzip, deflate, br`,
+        "Host": `api.m.jd.com`,
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0") : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0"),
+        "Accept-Language": `zh-Hans-CN;q=1, en-CN;q=0.9`,
+      }
+    }
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          // console.log('queryVkComponent', data)
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 //查询当前商品列表
-function jdfactory_getProductList(flag) {
+function jdfactory_getProductList(flag = false) {
   return new Promise(resolve => {
     $.post(taskPostUrl('jdfactory_getProductList'), async (err, resp, data) => {
       try {
@@ -467,10 +521,13 @@ function jdfactory_getProductList(flag) {
             data = JSON.parse(data);
             if (data.data.bizCode === 0) {
               $.canMakeList = data.data.result.canMakeList;//当前可选商品列表 sellOut:1为已抢光，0为目前可选择
+              $.canMakeList.sort(sortCouponCount);
+              console.log(`商品名称       可选状态    剩余量`)
+              for (let item of $.canMakeList) {
+                console.log(`${item.name.slice(-4)}         ${item.sellOut === 1 ? '已抢光':'可 选'}      ${item.couponCount}`);
+              }
               if (!flag) {
-                console.log(`商品名称       可选状态    剩余量`)
                 for (let item of $.canMakeList) {
-                  console.log(`${item.name.slice(-4)}         ${item.sellOut === 1 ? '已抢光':'可选'}      ${item.couponCount}`);
                   if (item.name.indexOf(wantProduct) > -1 && item.couponCount > 0 && item.sellOut === 0) {
                     await jdfactory_makeProduct(item.skuId);
                     break
@@ -490,6 +547,9 @@ function jdfactory_getProductList(flag) {
     })
   })
 }
+function sortCouponCount(a, b) {
+  return b['couponCount'] - a['couponCount']
+}
 function jdfactory_getHomeData() {
   return new Promise(resolve => {
     $.post(taskPostUrl('jdfactory_getHomeData'), async (err, resp, data) => {
@@ -499,6 +559,7 @@ function jdfactory_getHomeData() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (safeGet(data)) {
+            // console.log(data);
             data = JSON.parse(data);
             if (data.data.bizCode === 0) {
               $.haveProduct = data.data.result.haveProduct;
@@ -548,7 +609,7 @@ function readShareCode() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log(`随机取个${randomCount}码放到您固定的互助码后面`)
+            console.log(`随机取${randomCount}个码放到您固定的互助码后面`)
             data = JSON.parse(data);
           }
         }
