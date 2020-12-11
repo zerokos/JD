@@ -115,7 +115,7 @@ async function jdPet() {
       }
       return
     }
-    console.log(`\n【您的互助码shareCode】 ${$.petInfo.shareCode}\n`);
+    console.log(`\n【您的${$.name}互助码shareCode】 ${$.petInfo.shareCode}\n`);
     await taskInit();
     if ($.taskInit.resultCode === '9999' || !$.taskInit.result) {
       console.log('初始化任务异常, 请稍后再试');
@@ -436,7 +436,7 @@ async function showMsg() {
   }
 }
 function readShareCode() {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     $.get({url: `http://api.turinglabs.net/api/v1/jd/pet/read/${randomCount}/`}, (err, resp, data) => {
       try {
         if (err) {
@@ -454,6 +454,8 @@ function readShareCode() {
         resolve(data);
       }
     })
+    await $.wait(10000);
+    resolve()
   })
 }
 function shareCodesFormat() {
