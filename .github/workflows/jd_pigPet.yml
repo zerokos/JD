@@ -1,4 +1,4 @@
-name: jd_pigPet
+name: jd_pigPet 京东金融养猪猪脚本
 
 on:
   workflow_dispatch:

@@ -1,23 +1,23 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_speed 天天加速
+name: jd_car 京东汽车
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '33 */3 * * *'
+    - cron: '10 7 * * *'
   # watch:
   #   types: started
   repository_dispatch:
-    types: speed
+    types: car
 jobs:
   build:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: Checkout
+      - name: jd_car
         run: |
           git clone https://gitee.com/lxk0301/jd_scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
@@ -31,11 +31,11 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【天天加速】'
+      - name: '运行 【京东汽车】'
         run: |
           cd  ~/scripts
           npm install
-          node jd_speed.js
+          node jd_car.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
