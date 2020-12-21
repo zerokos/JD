@@ -4,9 +4,10 @@
 name: jd_joy 宠汪汪
 
 on:
+  push:
   workflow_dispatch:
   schedule:
-    - cron: '0 0,1,4,10,15,16 * * *'
+    - cron: '0 */2 * * *'
   # watch:
   #   types: started
   repository_dispatch:
@@ -19,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://gitee.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

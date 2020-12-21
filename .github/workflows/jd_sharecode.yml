@@ -2,6 +2,7 @@
 name: 互助码自动上车
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: '20 18 * * *'

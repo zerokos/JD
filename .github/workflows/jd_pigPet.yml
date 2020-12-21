@@ -1,6 +1,7 @@
 name: jd_pigPet 京东金融养猪猪脚本
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: '*/20 */1 * * *'
@@ -16,7 +17,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://gitee.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

@@ -4,6 +4,7 @@
 name:  jd_kd 京东快递签到
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: '10 0 * * *'
@@ -19,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://gitee.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:

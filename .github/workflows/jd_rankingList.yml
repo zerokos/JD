@@ -4,6 +4,7 @@
 name: jd_rankingList 京东排行榜
 
 on:
+  push:
   workflow_dispatch:
   schedule:
     - cron: '11 18 * * *'
@@ -19,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone https://gitee.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
