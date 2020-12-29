@@ -41,6 +41,8 @@ jobs:
           node jd_ds.js
           node jd_car.js
           node jd_kd.js
+          wget https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js
+          node JD_DailyBonus.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
