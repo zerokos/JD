@@ -1,7 +1,7 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_pet 东东萌宠
+name: 东东萌宠&京东家庭号
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -37,6 +37,7 @@ jobs:
           cd  ~/scripts
           npm install
           node jd_pet.js
+          node jd_family.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}

@@ -1,17 +1,17 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_health 健康抽奖机
+name: jd_live直播
 
 on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '10 0 * * *'
+    - cron: '10-20/5 12 * * *'
   # watch:
   #       types: started
   repository_dispatch:
-    types: health
+    types: live_redrain
 jobs:
   build:
 
@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         run: |
-          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -32,12 +32,11 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【健康抽奖机】'
+      - name: '运行 【jd_live.js】'
         run: |
           cd  ~/scripts
           npm install
-          node jd_health.js
-          node jd_jdh.js
+          node jd_live.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}

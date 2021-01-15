@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: jd_car
         run: |
-          git clone -b master https://github.com/lxk0301/jd_scripts.git ~/scripts
+          git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
