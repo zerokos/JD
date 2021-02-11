@@ -1,17 +1,17 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_bean_home 领京豆额外奖励
+name: jd_nian 炸年兽
 
 on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '10 7 * * *'
+    - cron: '0 */1 * * *' #此处为UTC-0时间
   # watch:
-  #       types: started
+  #   types: started
   repository_dispatch:
-    types: bean_home
+    types: jd_nian
 jobs:
   build:
 
@@ -32,17 +32,18 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【京东取关商品】'
+      - name: '运行炸年兽'
         run: |
           cd  ~/scripts
           npm install
-          node jd_bean_home.js
+          node jd_nian.js
+          node jd_nianCollect.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          UN_SUBSCRIBES: ${{ secrets.UN_SUBSCRIBES }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
+          JDNIAN_SHARECODES: ${{ secrets.JDNIAN_SHARECODES }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
           BARK_SOUND: ${{ secrets.BARK_SOUND }}

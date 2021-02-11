@@ -1,24 +1,24 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_car 京东汽车
+name: jd_crazy_joy
 
 on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '10 7 * * *'
+    - cron: '0 */5 * * *'
   # watch:
-  #   types: started
+  #   types: [started]
   repository_dispatch:
-    types: car
+    types: jd_crazy_joy
 jobs:
   build:
 
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: jd_car
+      - name: Checkout
         run: |
           git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
       - name: Use Node.js ${{ matrix.node-version }}
@@ -32,19 +32,21 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【京东汽车】'
+      - name: '运行 【京东赚赚脚本&疯狂的joy】'
         run: |
           cd  ~/scripts
           npm install
-          node jd_car.js
+          node jd_crazy_joy.js
+          node jd_crazy_joy_coin.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
+          JOY_FEED_COUNT: ${{ secrets.JOY_FEED_COUNT }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
+          BARK_SOUND: ${{ secrets.BARK_SOUND }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
           IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}

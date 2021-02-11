@@ -1,26 +1,30 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: jd_jdzz&jd_crazy_joy
+name: 京豆兑换
 
 on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0,10 15,16 * * *'
   # watch:
-  #   types: [started]
+  #   types: started
   repository_dispatch:
-    types: joy_jdzz&jd_crazy_joy
+    types: jd_bean_exchange
 jobs:
-  build:
-
+  Build-Nodejs-and-Scripts:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: Checkout
+      - name: 获取 Scripts
         run: |
           git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
+      - name: 获取备份仓库
+        if: ${{ failure() }}
+        run: |
+          git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -32,22 +36,28 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【京东赚赚脚本&疯狂的joy】'
-        run: |
-          cd  ~/scripts
+
+      - name: '运行 【京豆兑换】'
+        run: | #0点兑换  
+          cd ~/scripts
           npm install
-          node jd_jdzz.js
-          node jd_crazy_joy.js
-          node jd_crazy_joy_coin.js
+          node set_jd_time.js
+          node jd_blueCoin.js & node jd_car_exchange.js & node jd_joy_reward.js 
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          JOY_FEED_COUNT: ${{ secrets.JOY_FEED_COUNT }}
+          JD_BEAN_STOP: ${{secrets.JD_BEAN_STOP}} #自定义延迟签到,单位毫秒. 默认分批并发无延迟. 延迟作用于每个签到接口, 如填入延迟则切换顺序签到(耗时较长)
+          JD_BEAN_SIGN_STOP_NOTIFY: ${{secrets.JD_BEAN_SIGN_STOP_NOTIFY}}
+          JD_BEAN_SIGN_NOTIFY_SIMPLE: ${{secrets.JD_BEAN_SIGN_NOTIFY_SIMPLE}}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
           BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_USER_ID: ${{ secrets.TG_USER_ID }}
+          BARK_SOUND: ${{ secrets.BARK_SOUND }}
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
           IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+          MARKET_COIN_TO_BEANS: ${{ secrets.MARKET_COIN_TO_BEANS }}
+          MARKET_REWARD_NOTIFY: ${{ secrets.MARKET_REWARD_NOTIFY }}
+          JD_JOY_REWARD_NOTIFY: ${{ secrets.JD_JOY_REWARD_NOTIFY }}
+          JD_JOY_REWARD_NAME: ${{ secrets.JD_JOY_REWARD_NAME }}

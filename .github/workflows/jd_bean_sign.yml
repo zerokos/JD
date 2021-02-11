@@ -1,26 +1,30 @@
 # This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: 京豆签到脚本&年货节
+name: 京豆签到类
 
 on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '30 15,0 * * *'
   # watch:
   #   types: started
   repository_dispatch:
-    types: bean_sgin
+    types: 签到类
 jobs:
-  build:
-
+  Build-Nodejs-and-Scripts:
     runs-on: ubuntu-latest
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
-      - name: Checkout
+      - name: 获取 Scripts
         run: |
           git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
+      - name: 获取备份仓库
+        if: ${{ failure() }}
+        run: |
+          git clone -b master https://gitlab.com/MrRight/Scripts.git ~/scripts
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -32,20 +36,25 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('package-lock.json') }} # 使用 package-lock.json 的 Hash 作为缓存的 key。也可以使用 package.json 代替
-      - name: '运行 【京豆签到脚本】'
-        run: |  
+
+      - name: '运行 【京豆签到类:】'
+        run: | #  
           cd ~/scripts
           npm install 
           node jd_bean_sign.js
           node jd_bean_home.js
+          node jd_bean_change.js
+          node jd_club_lottery.js
           node jd_car.js
           node jd_kd.js
           node jd_cash.js
           node jx_sign.js
           node jd_nh.js
           node jd_new_shop.js
-          wget https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js
-          node JD_DailyBonus.js
+          node jd_immortal.js
+          node jd_jdzz.js
+          node jd_baiTiao.js
+          node jd_paopao.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
